@@ -18,6 +18,8 @@ class ArticleFactory extends Factory
     {
         return [
             //
+            'title' => $this->faker->sentence,
+            'content' => $this->faker->text(500),
         ];
     }
 }

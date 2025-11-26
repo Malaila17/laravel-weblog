@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->string('image');
+            $table->string('image')->default('');
             $table->timestamps();
-            $table->foreignId('user_id');
-            $table->boolean('is_premium');
+            // $table->foreignId('user_id');
+            $table->boolean('is_premium')->default(false);
         });
     }
 
