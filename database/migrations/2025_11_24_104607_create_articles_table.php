@@ -13,7 +13,12 @@ return new class extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->id();
+            $table->string('title');
+            $table->text('content');
+            $table->string('image');
             $table->timestamps();
+            $table->foreignId('user_id');
+            $table->boolean('is_premium');
         });
     }
 
