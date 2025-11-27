@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Article;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,8 @@ class CommentFactory extends Factory
     {
         return [
             //
+            'content' => $this->faker->text(200),
+            'article_id' => Article::inRandomOrder()->first()->id,
         ];
     }
 }

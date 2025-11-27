@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
+use App\Models\Article;
 
 class CommentController extends Controller
 {
@@ -27,9 +28,16 @@ class CommentController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCommentRequest $request)
+    public function store(StoreCommentRequest $request, Article $article)
     {
-        //
+        //haalt inhoud van het formulier op (content van comment)
+        $validated = $request->validated();
+
+        //bij dit artikel, vind de comments, maak een nieuwe comment met als inhoud $validated
+        $article->comments()->create($validated);
+
+        //ga terug naar de show pagina van het artikel
+        return redirect()->route('articles.show', $article->id);
     }
 
     /**
