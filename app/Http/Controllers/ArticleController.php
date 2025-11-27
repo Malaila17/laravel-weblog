@@ -24,6 +24,7 @@ class ArticleController extends Controller
     public function create()
     {
         //
+        return view('articles.create');
     }
 
     /**
@@ -31,7 +32,12 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        // Maakt een nieuw item aan met de gevalideerde gegevens
+        Article::create($validated);
+
+        return redirect()->route('articles.index');
     }
 
     /**

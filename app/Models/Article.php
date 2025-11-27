@@ -8,11 +8,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Article extends Model
 {
+    protected $fillable = ['title', 'content'];
+    
     public function user() {
         return $this->belongsTo(User::class);
     }
 
-    public function  comments() {
+    public function comments() {
         return $this->hasMany(Comment::class);
     }
     public function categories(): BelongsToMany {

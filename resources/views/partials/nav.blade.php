@@ -1,5 +1,6 @@
 <nav>
     <ul>
-       <li><a href="{{ route('articles.index') }}">Article List</a></li>
+       <li><a href="{{ route('articles.index') }}">Artikel overzicht</a></li>
+       <li><a href="{{ route('articles.create') }}">Schrijf nieuw artikel</a></li>
     </ul>
 </nav>
