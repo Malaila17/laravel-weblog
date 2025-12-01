@@ -3,7 +3,6 @@
 @section('title', 'Overzicht')
 
 @section('content')
-    <p> this is the index page for articles </p>
     <table>
         <thead>
             <tr>
