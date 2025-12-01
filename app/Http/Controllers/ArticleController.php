@@ -6,6 +6,7 @@ use App\Models\Article;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Comment;
+use App\Models\User;
 
 class ArticleController extends Controller
 {
@@ -16,6 +17,18 @@ class ArticleController extends Controller
     {
         //
         $articles = Article::all()->sortByDesc('created_at');
+        return view('articles.index', compact('articles'));
+    }
+
+    /**
+     * Display a listing of the resource by user
+     */
+    public function index_by_user(User $username)
+    {
+        //
+        $user = User::all()->where('username', $username);
+        dd($user);
+        $articles = Article::all()->where('user_id', $user->id)->sortByDesc('created_at');
         return view('articles.index', compact('articles'));
     }
 

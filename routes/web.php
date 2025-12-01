@@ -15,6 +15,6 @@ Route::post('/comments/{article}', [CommentController::class, 'store'])->name('c
 Route::get('/login', [AuthController::class, 'home'])->name('auth.login');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 
-Route::get('{user}/index', [ArticleController::class, 'index'])->name('articles.index');
+Route::get('{user}/index', [ArticleController::class, 'index_by_user'])->name('articles.user.index');
 
 Route::redirect('/', '/articles');
