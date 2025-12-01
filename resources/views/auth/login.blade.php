@@ -1,10 +1,19 @@
+{{--<?php dd($errors); ?>--}}
+
 @extends('layouts.app')
 
 @section('title', 'Inloggen')
 
 @section('content')
     <h1>Inloggen</h1>
-    {{ $errors }}
+    <br>
+    
+    @if ($errors->has('username'))
+        <div class="alert alert-danger">
+            {{ $errors->first('username') }}
+        </div>
+    @endif
+    
     <form action="{{ route('login.authenticate') }}" method="POST">
         @csrf
         <label for="username">Gebruikersnaam:</label>
