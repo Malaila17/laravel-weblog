@@ -1,3 +1,9 @@
+<?php
+    use Illuminate\Support\Facades\Auth;
+
+    $current_user = Auth::user();
+?>
+
 @extends('layouts.app')
 
 @section('title', 'Overzicht')
@@ -15,6 +21,7 @@
             <tr>
                 <td><a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a></td>
                 <td>{{ $article->created_at }}</td>
+                @if($current_user && $article->user_id == $current_user->id)
                 <td>
                     <a href="{{ route('articles.edit', $article->id) }}">Bewerken</a>
                 </td>
@@ -25,6 +32,7 @@
                         <button type="submit">Verwijderen</button>
                     </form>
                 </td>
+                @endif
             </tr>
             @endforeach
         </tbody>

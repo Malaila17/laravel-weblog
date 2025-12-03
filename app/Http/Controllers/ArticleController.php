@@ -89,8 +89,10 @@ class ArticleController extends Controller
         $validated = $request->validated();
 
         $article->update($validated);
+        
+        $current_user = Auth::user();
 
-        return redirect()->route('articles.user.index');
+        return redirect()->route('articles.user.index', ['user' => $current_user->id]);
     }
 
     /**
