@@ -7,6 +7,7 @@ use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
 use App\Models\Comment;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class ArticleController extends Controller
 {
@@ -23,12 +24,18 @@ class ArticleController extends Controller
     /**
      * Display a listing of the resource by user
      */
-    public function index_by_user(User $username)
+    public function index_by_user(User $user)
     {
         //
-        $user = User::all()->where('username', $username);
-        dd($user);
-        $articles = Article::all()->where('user_id', $user->id)->sortByDesc('created_at');
+        if (!$user) {
+        abort(404, 'Gebruiker niet gevonden');
+        }
+
+        if (Auth::user()->id !== $user->id) {
+        abort(403, 'Toegang geweigerd: verkeerde gebruiker');
+        }
+    
+        $articles = $user->articles;
         return view('articles.index', compact('articles'));
     }
 
@@ -70,6 +77,7 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         //
+        return view('articles.edit', compact('article'));
     }
 
     /**
@@ -78,6 +86,11 @@ class ArticleController extends Controller
     public function update(UpdateArticleRequest $request, Article $article)
     {
         //
+        $validated = $request->validated();
+
+        $article->update($validated);
+
+        return redirect()->route('articles.user.index');
     }
 
     /**
@@ -86,5 +99,7 @@ class ArticleController extends Controller
     public function destroy(Article $article)
     {
         //
+        $article->delete();
+        return redirect()->route('articles.user.index');
     }
 }
