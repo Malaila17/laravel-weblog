@@ -6,6 +6,7 @@ use App\Models\Comment;
 use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\UpdateCommentRequest;
 use App\Models\Article;
+use Illuminate\Support\Facades\Auth;
 
 class CommentController extends Controller
 {
@@ -34,7 +35,10 @@ class CommentController extends Controller
         $validated = $request->validated();
 
         //bij dit artikel, vind de comments, maak een nieuwe comment met als inhoud $validated
-        $article->comments()->create($validated);
+        $comment = $article->comments()->create($validated);
+
+        $comment->user()->associate(Auth::user()->id);
+        $comment->save();
 
         //ga terug naar de show pagina van het artikel
         return redirect()->route('articles.show', $article->id);
