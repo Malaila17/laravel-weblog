@@ -14,6 +14,8 @@ class CategoryController extends Controller
     public function index()
     {
         //
+        $categories = Category::all()->sortByDesc('created_at');
+        return view('categories.index', compact('categories'));
     }
 
     /**
@@ -22,6 +24,7 @@ class CategoryController extends Controller
     public function create()
     {
         //
+        return view('categories.create');
     }
 
     /**
@@ -30,6 +33,12 @@ class CategoryController extends Controller
     public function store(StoreCategoryRequest $request)
     {
         //
+        $validated = $request->validated();
+
+        // Maakt een nieuw item aan met de gevalideerde gegevens
+        Category::create($validated);
+
+        return redirect()->route('categories.index');
     }
 
     /**

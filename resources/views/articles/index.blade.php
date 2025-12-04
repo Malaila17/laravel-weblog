@@ -26,7 +26,7 @@
                     <a href="{{ route('articles.edit', $article->id) }}">Bewerken</a>
                 </td>
                 <td>
-                    <form action="{{ route('articles.destroy', $article->id) }}" method="POST">
+                    <form action="{{ route('articles.destroy', $article->id) }}" method="POST" onsubmit="return confirm('Weet je zeker dat je dit artikel wilt verwijderen?');">
                         @csrf
                         @method('DELETE')
                         <button type="submit">Verwijderen</button>

@@ -20,6 +20,7 @@
                 $current_user = auth()->user();
             @endphp
             <li><a href="{{ route('articles.user.index', ['user' => $current_user->id]) }}">Artikelen van {{$current_user->username}}</a></li>
+            <li><a href="{{ route('categories.index') }}">Categorieën beheren</a></li>
         @endif
     </ul>
 </nav>

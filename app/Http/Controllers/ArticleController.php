@@ -77,6 +77,10 @@ class ArticleController extends Controller
     public function edit(Article $article)
     {
         //
+        if (Auth::user()->id !== $article->user_id) {
+        abort(403, 'Toegang geweigerd: verkeerde gebruiker');
+        }
+
         return view('articles.edit', compact('article'));
     }
 
@@ -89,10 +93,8 @@ class ArticleController extends Controller
         $validated = $request->validated();
 
         $article->update($validated);
-        
-        $current_user = Auth::user();
 
-        return redirect()->route('articles.user.index', ['user' => $current_user->id]);
+        return redirect()->route('articles.user.index', ['user' => Auth::user()->id]);
     }
 
     /**
@@ -102,6 +104,6 @@ class ArticleController extends Controller
     {
         //
         $article->delete();
-        return redirect()->route('articles.user.index');
+        return redirect()->route('articles.user.index', ['user' => Auth::user()->id]);
     }
 }
