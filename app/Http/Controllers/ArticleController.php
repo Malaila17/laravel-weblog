@@ -36,7 +36,7 @@ class ArticleController extends Controller
         abort(403, 'Toegang geweigerd: verkeerde gebruiker');
         }
     
-        $articles = $user->articles;
+        $articles = $user->articles->sortByDesc('created_at');
         return view('articles.index', compact('articles'));
     }
 
@@ -58,6 +58,9 @@ class ArticleController extends Controller
         $validated = $request->validated();
         $article = Article::create($validated);
         $article->categories()->attach($validated["category_ids"]);
+        // dd(Auth::user()->id);
+        $article->user()->associate(Auth::user()->id);
+        $article->save();
        
         return redirect()->route('articles.index');
     }
