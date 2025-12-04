@@ -22,6 +22,7 @@ class ArticleFactory extends Factory
             'title' => $this->faker->sentence,
             'content' => $this->faker->text(500),
             'user_id' => User::inRandomOrder()->first()->id,
+            'is_premium' => $this->faker->boolean(),
         ];
     }
 }

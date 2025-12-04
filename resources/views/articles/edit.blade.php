@@ -14,6 +14,13 @@
         <label for="content">Inhoud:</label>
         <textarea id="content" name="content">{{ $article->content }}</textarea>
         <br>
+        <label for="categories">Categorieën:</label>
+        <select id="categories" name="categories" multiple>
+            @foreach($categories as $category)
+                <option value="{{$category->name}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+        <p>Houd Ctrl (windows) / Command (Mac) ingedrukt om meerdere categorieën te selecteren.</p>
         <button type="submit">Bijwerken</button>
     </form>
 @endsection

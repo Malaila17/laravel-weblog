@@ -17,8 +17,8 @@ return new class extends Migration
             $table->text('content');
             $table->string('image')->default('');
             $table->timestamps();
-            $table->foreignId('user_id');
-            $table->boolean('is_premium')->default(false);
+            $table->foreignId('user_id')->default(1);
+            $table->boolean('is_premium');
         });
     }
 
