@@ -14,6 +14,7 @@
             <tr>
                 <th>Titel</th>
                 <th>Geplaatst op</th>
+                <th>Categorieën</th>
             </tr>
         </thead>
         <tbody>
@@ -21,6 +22,11 @@
             <tr>
                 <td><a href="{{ route('articles.show', $article->id) }}">{{ $article->title }}</a></td>
                 <td>{{ $article->created_at }}</td>
+                <?php $categories = $article->categories()->orderBy('name')->get(); ?>
+                <td>@foreach($categories as $category)
+                        {{$category->name}},
+                    @endforeach
+                </td>
                 @if($current_user && $article->user_id == $current_user->id)
                 <td>
                     <a href="{{ route('articles.edit', $article->id) }}">Bewerken</a>
