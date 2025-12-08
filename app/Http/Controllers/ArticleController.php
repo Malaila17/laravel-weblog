@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Article;
 use App\Http\Requests\StoreArticleRequest;
 use App\Http\Requests\UpdateArticleRequest;
+use App\Http\Requests\FilterArticleRequest;
 use App\Models\Category;
 use App\Models\Comment;
 use App\Models\User;
@@ -19,7 +20,8 @@ class ArticleController extends Controller
     {
         //
         $articles = Article::all()->sortByDesc('created_at');
-        return view('articles.index', compact('articles'));
+        $categories= Category::all()->sortBy('name');
+        return view('articles.index', compact('articles','categories'));
     }
 
     /**
@@ -58,11 +60,25 @@ class ArticleController extends Controller
         $validated = $request->validated();
         $article = Article::create($validated);
         $article->categories()->attach($validated["category_ids"]);
-        // dd(Auth::user()->id);
         $article->user()->associate(Auth::user()->id);
         $article->save();
        
         return redirect()->route('articles.index');
+    }
+
+    public function filter(FilterArticleRequest $request)
+    {
+        $validated = $request->validated();
+
+        $categoryIds = $validated['category_ids'];
+
+        $filtered_articles = Article::whereHas('categories', function ($q) use ($categoryIds) {
+            $q->whereIn('categories.id', $categoryIds);
+        })->with('categories')->get()->sortByDesc('created_at');
+
+        $categories = Category::all()->sortBy('name');
+
+        return view('articles.index', ['articles' => $filtered_articles, 'categories' => $categories]);
     }
 
     /**

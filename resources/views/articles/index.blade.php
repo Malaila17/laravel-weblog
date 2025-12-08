@@ -9,6 +9,18 @@
 @section('title', 'Overzicht')
 
 @section('content')
+    <form action="{{ route('articles.filter')}}" method="POST">
+        @csrf
+        <label for="categories">Filter op categorie:</label>
+        <br>
+        <select id="categories" name="category_ids[]" multiple>
+            @foreach($categories as $category)
+                <option value="{{$category->id}}">{{$category->name}}</option>
+            @endforeach
+        </select>
+        <button type="submit">Filter</button>
+    </form>    
+    
     <table>
         <thead>
             <tr>
