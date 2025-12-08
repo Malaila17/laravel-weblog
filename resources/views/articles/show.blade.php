@@ -9,6 +9,11 @@
 
 @section('content')
     <h2>{{$article->title}}</h2>
+    <p> Categorieën: 
+        @foreach($categories as $category)
+            {{$category->name}},
+        @endforeach
+    </p>
     <p>{{$article->content}}
     <br>
  

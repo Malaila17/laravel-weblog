@@ -72,7 +72,8 @@ class ArticleController extends Controller
     {
         //
         $comments = Comment::all()->where('article_id', $article->id)->sortByDesc('created_at');
-        return view('articles.show', compact('article','comments'));
+        $categories = $article->categories()->orderBy('name')->get();
+        return view('articles.show', compact('article','comments','categories'));
     }
 
     /**
