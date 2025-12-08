@@ -70,11 +70,21 @@ class ArticleController extends Controller
     {
         $validated = $request->validated();
 
-        $categoryIds = $validated['category_ids'];
+        $categoryIds = $validated['category_ids'] ?? [];
 
-        $filtered_articles = Article::whereHas('categories', function ($q) use ($categoryIds) {
-            $q->whereIn('categories.id', $categoryIds);
-        })->with('categories')->get()->sortByDesc('created_at');
+        if (empty($categoryIds)) {
+            return redirect()->route('articles.index');
+        }
+
+        $query = Article::query();
+
+        foreach ($categoryIds as $categoryId) {
+            $query->whereHas('categories', function ($q) use ($categoryId) {
+                $q->where('categories.id', $categoryId);
+            });
+        }
+
+        $filtered_articles = $query->with('categories')->get()->sortByDesc('created_at');
 
         $categories = Category::all()->sortBy('name');
 
