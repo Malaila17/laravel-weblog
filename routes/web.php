@@ -4,11 +4,13 @@ use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/articles', [ArticleController::class, 'index'])->name('articles.index');
 Route::get('/articles/create', [ArticleController::class, 'create'])->name('articles.create');
 Route::post('/articles', [ArticleController::class, 'store'])->name('articles.store');
+Route::get('/articles/premium', [ArticleController::class, 'index_premium'])->name('articles.premium');
 Route::post('/articles/filter', [ArticleController::class, 'filter'])->name('articles.filter');
 Route::get('/articles/{article}', [ArticleController::class, 'show'])->name('articles.show');
 Route::get('/articles/{article}/edit', [ArticleController::class, 'edit'])->name('articles.edit');
@@ -26,5 +28,7 @@ Route::get('/logout', [AuthController::class, 'logout'])->name('auth.logout');
 Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
 
 Route::get('/{user}/index', [ArticleController::class, 'index_by_user'])->middleware('auth')->name('articles.user.index');
+
+Route::post('/{user}/premium', [UserController::class, 'update'])->name('users.update');
 
 Route::redirect('/', '/articles');

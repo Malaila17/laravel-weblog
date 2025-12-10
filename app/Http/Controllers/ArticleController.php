@@ -19,9 +19,24 @@ class ArticleController extends Controller
     public function index()
     {
         //
-        $articles = Article::all()->sortByDesc('created_at');
+        $articles = Article::all()->where('is_premium', 0)->sortByDesc('created_at');
         $categories= Category::all()->sortBy('name');
         return view('articles.index', compact('articles','categories'));
+    }
+
+        /**
+     * Display a listing of the resource.
+     */
+    public function index_premium()
+    {
+        //
+        if (Auth::user()->is_premium == 1) {
+            $articles = Article::all()->where('is_premium', 1)->sortByDesc('created_at');
+            $categories= Category::all()->sortBy('name');
+            return view('articles.index', compact('articles','categories'));
+        } else {
+            return view('articles.get_premium');
+        }
     }
 
     /**

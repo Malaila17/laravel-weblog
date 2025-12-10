@@ -54,6 +54,9 @@ class UserController extends Controller
     public function update(UpdateUserRequest $request, User $user)
     {
         //
+        $user->is_premium = 1;
+        $user->save();
+        return redirect()->route('articles.premium');
     }
 
     /**
