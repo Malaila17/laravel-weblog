@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
@@ -15,11 +16,13 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('content');
-            $table->string('image')->default('');
+            // $table->string('image');
             $table->timestamps();
             $table->foreignId('user_id')->default(1);
             $table->boolean('is_premium')->default(false);
         });
+
+        DB::statement("ALTER TABLE articles ADD myimage LONGBLOB");
     }
 
     /**

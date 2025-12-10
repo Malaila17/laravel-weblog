@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Article extends Model
 {
-    protected $fillable = ['title', 'content'];
+    protected $fillable = ['title', 'content','myimage'];
     
     public function user() {
         return $this->belongsTo(User::class);

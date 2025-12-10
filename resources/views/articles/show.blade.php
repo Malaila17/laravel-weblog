@@ -14,7 +14,8 @@
             {{$category->name}},
         @endforeach
     </p>
-    <p>{{$article->content}}
+    <img src="{{ asset('storage/' . $article->myimage) }}" alt="{{ $article->title }}" style="max-width:400px;max-height: 400px;">
+    <p>{{$article->content}}</p>
     <br>
  
     @if($current_user)

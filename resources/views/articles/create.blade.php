@@ -4,14 +4,16 @@
 
 @section('content')
     <h1>Nieuwe blogpost schrijven</h1>
-    <form action="{{ route('articles.store')}}" method="POST">
+    <form action="{{ route('articles.store')}}" method="POST" enctype=multipart/form-data>
         @csrf
         <label for="title">Titel:</label>
         <input type="text" id="title" name="title" required>
         <br>
         <label for="content">Inhoud:</label>
         <textarea id="content" name="content"></textarea>
-        <br>
+        <br><br>
+        <label for="myimage">Voeg een afbeelding toe:</label>
+        <input type="file" id="myimage" name="myimage"><br><br>
         <label for="categories">Categorieën:</label>
         <select id="categories" name="category_ids[]" multiple>
             @foreach($categories as $category)

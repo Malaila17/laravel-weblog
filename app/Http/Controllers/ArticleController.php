@@ -39,7 +39,8 @@ class ArticleController extends Controller
         }
     
         $articles = $user->articles->sortByDesc('created_at');
-        return view('articles.index', compact('articles'));
+        $categories= Category::all()->sortBy('name');
+        return view('articles.index', compact('articles', 'categories' ));
     }
 
     /**
@@ -57,7 +58,16 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
+        // dd($request);
         $validated = $request->validated();
+        // dd($validated);
+
+        // handle uploaded image (input name: "image")
+        if ($request->hasFile('myimage')) {
+            $path = $request->file('myimage')->store('articles', 'public'); // storage/app/public/articles
+            $validated['myimage'] = $path; // adjust attribute name to your articles table (e.g. image, image_path)
+        }
+
         $article = Article::create($validated);
         $article->categories()->attach($validated["category_ids"]);
         $article->user()->associate(Auth::user()->id);
@@ -123,9 +133,18 @@ class ArticleController extends Controller
     public function update(UpdateArticleRequest $request, Article $article)
     {
         //
+        // dd($request);
         $validated = $request->validated();
+        // dd($validated);
+        if ($request->hasFile('myimage')) {
+            $path = $request->file('myimage')->store('articles', 'public'); // storage/app/public/articles
+            $validated['myimage'] = $path; // adjust attribute name to your articles table (e.g. image, image_path)
+        }
 
         $article->update($validated);
+        $article->categories()->detach();
+        $article->categories()->attach($validated["category_ids"]);
+        $article->save();
 
         return redirect()->route('articles.user.index', ['user' => Auth::user()->id]);
     }
