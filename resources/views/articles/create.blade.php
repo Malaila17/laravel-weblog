@@ -21,6 +21,9 @@
             @endforeach
         </select>
         <p>Houd Ctrl (windows) / Command (Mac) ingedrukt om meerdere categorieën te selecteren.</p>
+        <label for="is_premium"> Dit is een premium artikel:</label>
+        <input type="checkbox" id="is_premium" name="is_premium" value="true">
+        <br><br>
         <button type="submit">Opslaan</button>
     </form>
 @endsection
