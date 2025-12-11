@@ -79,8 +79,8 @@ class ArticleController extends Controller
 
         // handle uploaded image (input name: "image")
         if ($request->hasFile('myimage')) {
-            $path = $request->file('myimage')->store('articles', 'public'); // storage/app/public/articles
-            $validated['myimage'] = $path; // adjust attribute name to your articles table (e.g. image, image_path)
+            $path = $request->file('myimage')->store('articles', 'public');
+            $validated['myimage'] = $path;
         }
 
         $article = Article::create($validated);
@@ -88,7 +88,8 @@ class ArticleController extends Controller
         $article->user()->associate(Auth::user()->id);
         $article->save();
        
-        return redirect()->route('articles.index');
+        // return redirect()->route('articles.index');
+        return redirect()->route('articles.user.index', ['user' => Auth::user()->id]);
     }
 
     public function filter(FilterArticleRequest $request)
@@ -122,9 +123,13 @@ class ArticleController extends Controller
     public function show(Article $article)
     {
         //
-        $comments = Comment::all()->where('article_id', $article->id)->sortByDesc('created_at');
-        $categories = $article->categories()->orderBy('name')->get();
-        return view('articles.show', compact('article','comments','categories'));
+        if ($article->is_premium && (Auth::user()->is_premium != 1)) {
+            abort(403, 'Toegang geweigerd: geen premium lidmaatschap');
+        } else {
+            $comments = Comment::all()->where('article_id', $article->id)->sortByDesc('created_at');
+            $categories = $article->categories()->orderBy('name')->get();
+            return view('articles.show', compact('article','comments','categories'));
+        }
     }
 
     /**

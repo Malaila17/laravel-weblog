@@ -22,7 +22,8 @@
         </select>
         <p>Houd Ctrl (windows) / Command (Mac) ingedrukt om meerdere categorieën te selecteren.</p>
         <label for="is_premium"> Dit is een premium artikel:</label>
-        <input type="checkbox" id="is_premium" name="is_premium" value="true">
+        <input type="hidden" name="is_premium" value="0">
+        <input type="checkbox" id="is_premium" name="is_premium" value="1">
         <br><br>
         <button type="submit">Opslaan</button>
     </form>
