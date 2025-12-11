@@ -9,6 +9,7 @@
 @section('title', 'Overzicht')
 
 @section('content')
+
     <form action="{{ route('articles.filter')}}" method="POST">
         @csrf
         <label for="categories">Filter op categorie:</label>

@@ -1,9 +1,3 @@
-<?php
-    use Illuminate\Support\Facades\Auth;
-
-    $current_user = Auth::user();
-?>
-
 <nav>
     <ul>
         <li><a href="{{ route('articles.index') }}">Artikel overzicht</a></li>

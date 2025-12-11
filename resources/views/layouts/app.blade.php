@@ -1,3 +1,9 @@
+<?php
+    use Illuminate\Support\Facades\Auth;
+
+    $current_user = Auth::user();
+?>
+
 <!DOCTYPE html>
 <html>
 <head>

@@ -45,15 +45,7 @@ class ArticleController extends Controller
     public function index_by_user(User $user)
     {
         //
-        if (!$user) {
-        abort(404, 'Gebruiker niet gevonden');
-        }
-
-        if (Auth::user()->id !== $user->id) {
-        abort(403, 'Toegang geweigerd: verkeerde gebruiker');
-        }
-    
-        $articles = $user->articles->sortByDesc('created_at');
+        $articles = Auth::user()->articles->sortByDesc('created_at');
         $categories= Category::all()->sortBy('name');
         return view('articles.index', compact('articles', 'categories' ));
     }
@@ -73,22 +65,18 @@ class ArticleController extends Controller
      */
     public function store(StoreArticleRequest $request)
     {
-        // dd($request);
         $validated = $request->validated();
-        // dd($validated);
 
-        // handle uploaded image (input name: "image")
         if ($request->hasFile('myimage')) {
             $path = $request->file('myimage')->store('articles', 'public');
             $validated['myimage'] = $path;
         }
 
+        $validated['user_id'] = Auth::id();
+
         $article = Article::create($validated);
         $article->categories()->attach($validated["category_ids"]);
-        $article->user()->associate(Auth::user()->id);
-        $article->save();
        
-        // return redirect()->route('articles.index');
         return redirect()->route('articles.user.index', ['user' => Auth::user()->id]);
     }
 
@@ -125,11 +113,12 @@ class ArticleController extends Controller
         //
         if ($article->is_premium && (Auth::user()->is_premium != 1)) {
             abort(403, 'Toegang geweigerd: geen premium lidmaatschap');
-        } else {
-            $comments = Comment::all()->where('article_id', $article->id)->sortByDesc('created_at');
-            $categories = $article->categories()->orderBy('name')->get();
-            return view('articles.show', compact('article','comments','categories'));
-        }
+        } 
+
+        $comments = Comment::all()->where('article_id', $article->id)->sortByDesc('created_at');
+        $categories = $article->categories()->orderBy('name')->get();
+        return view('articles.show', compact('article','comments','categories'));
+    
     }
 
     /**
@@ -152,18 +141,15 @@ class ArticleController extends Controller
      */
     public function update(UpdateArticleRequest $request, Article $article)
     {
-        //
-        // dd($request);
         $validated = $request->validated();
-        // dd($validated);
+
         if ($request->hasFile('myimage')) {
             $path = $request->file('myimage')->store('articles', 'public'); // storage/app/public/articles
             $validated['myimage'] = $path; // adjust attribute name to your articles table (e.g. image, image_path)
         }
 
         $article->update($validated);
-        $article->categories()->detach();
-        $article->categories()->attach($validated["category_ids"]);
+        $article->categories()->sync($validated["category_ids"]);
         $article->save();
 
         return redirect()->route('articles.user.index', ['user' => Auth::user()->id]);
